@@ -43,6 +43,16 @@ async def _download_content(client: AsyncClient, fp: str) -> Any:
 class File:
     """
     Represents a file stored in a storage bucket.
+
+    Attributes:
+        name: The name of the file
+        bucket_id: The ID of the bucket the file is in
+        owner: The owner of the file
+        id: The ID of the file
+        created_at : When the file was created
+        updated_at: When the file was updated
+        last_accessed_at: When the file was last accessed
+        metadata: Metadata about the file eg. file size
     """
     name: str
     bucket_id: str
@@ -89,7 +99,7 @@ class Bucket:
     def get_public_url(self, path: str) -> str:
         """
         Get the public URL of an object.
-        !!! warn:
+        !!! warn
             This method merely constructs the URL based on the parameters passed. It does not check if the URL actually exists.
         
         Args:
@@ -115,7 +125,7 @@ class Bucket:
     async def delete(self) -> dict[str, str]:
         """
         Delete the bucket.
-        !!! note:
+        !!! note
             The bucket needs to be emptied before deleting.
         
         Returns:
@@ -136,7 +146,7 @@ class Bucket:
         """
         Move a file in the bucket.
         
-        !!! tip:
+        !!! tip
             This method can also be used to rename a file, by changing the target file name passed as argument `to_path`.
         
         Args:
@@ -144,8 +154,6 @@ class Bucket:
             to_path: The final location of the file.
         Returns:
             The raw API response.
-        Raises:
-            [StorageError][supa.exceptions.StorageError]
         Example:
             ```py
             await bucket.move("folder/cat.jpg", "folder/newcat.jpg")
@@ -166,10 +174,6 @@ class Bucket:
         Args:
             file_path: The initial path of the file to be copied
             target: The final location of the copy
-        Returns:
-            The raw API response.
-        Raises:
-            [StorageError][supa.exceptions.StorageError]
         Example:
             ```py
             await bucket.copy("folder/cat.jpg", "folder/destination.jpg")
@@ -189,8 +193,6 @@ class Bucket:
         
         Args:
             path: The path of the file to be removed.
-        Raises:
-            [StorageError][supa.exceptions.StorageError]
         Returns:
             The raw API response.
         """
@@ -203,8 +205,6 @@ class Bucket:
         
         Args:
             paths: Paths of files to be removed.
-        Raises:
-            [StorageError][supa.exceptions.StorageError]
         Returns:
             List of [File][supa.storage.File] objects that were removed.
         """
@@ -218,8 +218,6 @@ class Bucket:
         Args:
             path: The folder path
             options: Search options, including `limit`, `offset`, and `sortBy`.
-        Raises:
-            [StorageError][supa.exceptions.StorageError]
         Returns:
             The list of [File][supa.storage.File] objects that were found.
         """
@@ -238,8 +236,6 @@ class Bucket:
         
         Args:
             path: The path of the file to be downloaded eg. `folder/file.png`
-        Raises:
-            [StorageError][supa.storage.StorageError]
         Returns:
             The contents of the file.
         """
@@ -249,7 +245,7 @@ class Bucket:
         """
         Upload a file to the bucket.
         
-        !!! note:
+        !!! note
             Be sure to pass the right mime-type for your file!
         
         Args:
@@ -258,8 +254,6 @@ class Bucket:
             cache_control: Cache control
             mime_type: The mime-type of the file
             upsert: Whether to do an upsert (UPDATE if the file already exists, else INSERT)
-        Raises:
-            [StorageError][supa.exceptions.StorageError]
         Returns:
             The raw API response.
         """
@@ -317,7 +311,7 @@ class StorageClient:
 
         Returns:
             The [Bucket][supa.storage.Bucket] that was created.
-            !!! note:
+            !!! note
                 The bucket returned will have the owner field set to None.
         """
         r = _handle_response(await self._client.post(f"/bucket", json={"id": id, "name": name or id, "public": public}))
@@ -338,7 +332,7 @@ class StorageClient:
     async def delete_bucket(self, id: str) -> dict[str, str]:
         """
         Delete a storage bucket.
-        !!! note:
+        !!! note
             The bucket needs to be emptied before deleting.
 
         Args:
