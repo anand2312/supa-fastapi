@@ -1,0 +1,51 @@
+site_name: supa-fastapi
+site_url: https://anand2312.github.io/supa-fastapi
+site_description: Documentation for supa-fastapi.
+site_author: anand2312
+
+theme:
+  features:
+    - navigation.top
+  name: "material"
+  palette:
+    - scheme: slate
+      primary: pink
+      toggle:
+        icon: material/eye-outline
+        name: Switch to light mode
+    - scheme: default
+      primary: pink
+      toggle:
+        icon: material/eye
+        name: Switch to dark mode
+nav:
+  - Home: index.md
+  - Reference:
+      - Client: reference/client.md
+      - Storage: reference/storage.md
+      - Exceptions: reference/exceptions.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_source: false
+            show_root_heading: true
+            members_order: "source"
+          import:
+          - https://anand2312.github.io/pgrest/objects.inv
+          - https://anand2312.github.io/supabase-realtime-client/objects.inv
+          # - https://anand2312.github.io/supabase-auth/objects.inv
+
+repo_name: anand2312/supa-fastapi
+repo_url: https://github.com/anand2312/supa-fastapi
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - toc:
+      permalink: "#"
