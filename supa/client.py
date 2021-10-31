@@ -1,15 +1,20 @@
-from contextlib import suppress
-from typing import Optional
+from typing import Optional, Type
 
 from supa.storage import StorageClient
 
 # to support extras, individually suppresss possible import errors
-with suppress(ImportError):
-    from pgrest import Client
-with suppress(ImportError):
-    from realtime import Socket
-with suppress(ImportError):
+try:
+    from pgrest import Client as DatabaseClient
+except ImportError:
+    DatabaseClient = None
+try:
+    from realtime import Socket as RealtimeSocket
+except ImportError:
+    RealtimeSocket = None
+try:
     from gotrue import AsyncGoTrueClient
+except ImportError:
+    AsyncGoTrueClient = None
 
 
 class Supa:
@@ -39,6 +44,28 @@ class Supa:
             [StorageClient][supa.storage.StorageClient]
         """
         return StorageClient(self.storage_url, self._get_headers(access_token))
+
+    def db(self, access_token: Optional[str] = None) -> DatabaseClient:  # type: ignore
+        """
+        Get the database client.
+        
+        Args:
+            access_token: The access_token of the currently signed in user.
+        Returns:
+            [DatabaseClient][pgrest.Client]
+        """
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "apiKey": self.key,
+            "Authorization": f"Bearer {access_token or self.key}"
+        }
+        try:
+            client = DatabaseClient(self.rest_url, headers=headers)  # type: ignore
+        except TypeError:
+            raise ImportError("You have not installed the `db` extra. Install it with \n pip install supa-fastapi[db]")
+        else:
+            return client
 
     def _get_headers(self, key: Optional[str] = None) -> dict[str, str]:
         # get auth headers
