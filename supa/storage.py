@@ -281,7 +281,7 @@ class StorageClient:
     def __init__(self, url: str, headers: dict[str, Any]) -> None:
         self.url = url
         self._client = AsyncClient(base_url=self.url, headers=headers)
-
+    
     async def list_buckets(self) -> list[Bucket]:
         """
         Retrieves all the buckets associated with this project.
