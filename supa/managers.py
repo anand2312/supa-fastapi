@@ -25,3 +25,6 @@ class DatabaseClientManager:
             yield self._db_client.auth(access_token)
         finally:
             self._db_client.auth(self.key)
+    
+    async def aclose(self) -> None:
+        await self._db_client.aclose()

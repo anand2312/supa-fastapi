@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, IO, Optional, Union
@@ -211,7 +213,7 @@ class Bucket:
         r = _handle_response(await self._client.delete(f"/object/{self.name}", json={"prefixes": paths}))  # type: ignore
         return [File(**i) for i in r.json()]
 
-    async def list(self, path: Optional[str] = None, options: dict = {}) -> list[File]:
+    async def list_files(self, path: Optional[str] = None, options: dict = {}) -> list[File]:
         """
         Lists files in the bucket under the specified path.
         
@@ -341,3 +343,9 @@ class StorageClient:
             The raw API response.
         """
         return await _delete_bucket(self._client, id)
+
+    async def aclose(self) -> None:
+        """
+        Close the underlying HTTP proxies.
+        """
+        await self._client.aclose()

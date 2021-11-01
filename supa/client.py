@@ -1,5 +1,7 @@
-from typing import Optional, Type
+from __future__ import annotations
 
+from typing import Optional
+from supa.managers import DatabaseClientManager
 from supa.storage import StorageClient
 
 # to support extras, individually suppresss possible import errors
@@ -34,6 +36,8 @@ class Supa:
         self.auth_url = f"{self.url}/auth/v1"
         self.storage_url = f"{self.url}/storage/v1"
 
+        self._db_manager = DatabaseClientManager(self.rest_url, self.key)
+
     def storage(self, access_token: Optional[str] = None) -> StorageClient:
         """
         Get the storage client.
@@ -47,7 +51,11 @@ class Supa:
 
     def db(self, access_token: Optional[str] = None) -> DatabaseClient:  # type: ignore
         """
-        Get the database client.
+        Get the database client, which connects with the provided access_token. If not specified, the anon key is used.
+
+        !!! note
+            Data cannot be retrieved with the anon key if RLS is enabled on your tables. But in an authenticated context, it is recommended to use
+            [ctx.db][supa.context.Context] instead for database operations, as it will automatically be set with the right access_token.
         
         Args:
             access_token: The access_token of the currently signed in user.
