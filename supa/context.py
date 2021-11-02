@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 
-class Context:
-    """Contains useful attributes and methods in an authenticated context."""
+from supa.storage import StorageClient
+
+if TYPE_CHECKING:
+    try:
+        from pgrest import Client as DatabaseClient
+    except ImportError:
+        DatabaseClient = None
