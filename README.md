@@ -1,5 +1,6 @@
 # supa-fastapi
-![Logo](logo.png)
+
+![Logo](docs/logo.png)
 
 Easily integrate [Supabase, the open-source Firebase alternative](https://supabase.io) with your [FastAPI](https://fastapi.tiangolo.com) apps!
 
@@ -8,3 +9,5 @@ Easily integrate [Supabase, the open-source Firebase alternative](https://supaba
 - A PostgreSQL database
 - Listen to realtime changes on the database
 - Object Storage
+
+Currently a work-in-progress. Watch this repo for updates!
